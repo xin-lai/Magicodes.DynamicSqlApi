@@ -11,14 +11,9 @@ namespace Magicodes.DynamicSqlApi.All
 {
     public static class Extensions
     {
-        public static void AddDynamicSqlApi(this IServiceCollection services, string connectionString = null, string sqlMapperFileName = "sqlMapper.xml")
+        public static void AddAllDynamicSqlApi(this IServiceCollection services, string connectionString, string sqlMapperFileName = "sqlMapper.xml")
         {
             services.AddDynamicSqlApi<DefaultCodeBuilder, CsScriptCodeCompiler, DapperSqlExecutor, SqlServerTSqlParser>(connectionString, sqlMapperFileName);
-        }
-
-        public static void UseDynamicSqlApi(this IApplicationBuilder app)
-        {
-            app.UseDynamicSqlApi();
         }
     }
 }

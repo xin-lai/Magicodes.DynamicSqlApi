@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -20,7 +21,7 @@ namespace Magicodes.DynamicSqlApi.Core
         /// <param name="services"></param>
         /// <param name="connectionString"></param>
         /// <param name="sqlMapperFileName"></param>
-        public static void AddDynamicSqlApi<TCodeBuilder, TCodeCompiler, TSqlExecutor, TTSqlParser>(this IServiceCollection services, string connectionString = null, string sqlMapperFileName = "sqlMapper.xml")
+        public static void AddDynamicSqlApi<TCodeBuilder, TCodeCompiler, TSqlExecutor, TTSqlParser>(this IServiceCollection services, string connectionString, string sqlMapperFileName = "sqlMapper.xml")
             where TCodeBuilder : class, ICodeBuilder
             where TCodeCompiler : class, ICodeCompiler
             where TSqlExecutor : class, ISqlExecutor
@@ -34,7 +35,10 @@ namespace Magicodes.DynamicSqlApi.Core
 
             if (!string.IsNullOrWhiteSpace(connectionString))
                 services.AddTransient<IDbConnection>(p => new SqlConnection(connectionString));
-
+            else
+            {
+                throw new ApplicationException("请配置连接字符串！");
+            }
             services.AddTransient<ICodeBuilder, TCodeBuilder>();
             services.AddTransient<ICodeCompiler, TCodeCompiler>();
             services.AddTransient<ISqlExecutor, TSqlExecutor>();
@@ -49,10 +53,10 @@ namespace Magicodes.DynamicSqlApi.Core
         public static void ConfigureAspNetCore(IServiceProvider serviceProvider)
         {
             var partManager = serviceProvider.GetService<ApplicationPartManager>();
-
+            var logger = serviceProvider.GetService<ILogger>();
             var codeBuilder = serviceProvider.GetService<ICodeBuilder>();
             var code = codeBuilder.Build();
-
+            logger?.LogDebug(code);
             var codeCompiler = serviceProvider.GetService<ICodeCompiler>();
             var assembly = codeCompiler.CompileCode(code);
             partManager?.FeatureProviders?.Add(new GenericTypeControllerFeatureProvider(assembly));

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Magicodes.DynamicSqlApi.Core.DynamicApis;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,8 @@ namespace Magicodes.DynamicSqlApi.Core.CodeBuilder
             "Microsoft.AspNetCore.Mvc",
             "Microsoft.Extensions.Logging",
             typeof(ISqlExecutor).Namespace,
-            typeof(IConfiguration).Namespace
+            typeof(IConfiguration).Namespace,
+            typeof(DynamicApiControllerAttribute).Namespace
         };
 
         public DefaultCodeBuilder(IConfiguration configuration, ITSqlParser tSqlParser)
@@ -134,12 +136,12 @@ namespace Magicodes.DynamicSqlApi.Core.CodeBuilder
             codeSb.AppendLine("    [Route(\"[controller]\")]");
             codeSb.AppendLine("    public class DyApiController : ControllerBase");
             codeSb.AppendLine("    {");
-            codeSb.AppendLine("        public DyApiController(DbAccesstor dbAccesstor, IConfiguration configuration)");
+            codeSb.AppendLine("        public DyApiController(ISqlExecutor sqlExecutor, IConfiguration configuration)");
             codeSb.AppendLine("        {");
-            codeSb.AppendLine("            DbAccesstor = dbAccesstor;");
+            codeSb.AppendLine("            SqlExecutor = sqlExecutor;");
             codeSb.AppendLine("            Configuration = configuration;");
             codeSb.AppendLine("        }");
-            codeSb.AppendLine("        public DbAccesstor DbAccesstor { get; }");
+            codeSb.AppendLine("        public ISqlExecutor SqlExecutor { get; }");
             codeSb.AppendLine("        public IConfiguration Configuration { get; }");
             foreach (var item in sections)
             {
@@ -147,7 +149,7 @@ namespace Magicodes.DynamicSqlApi.Core.CodeBuilder
                 codeSb.AppendFormat("        [HttpGet(\"{0}\")]", item.Key).AppendLine();
                 codeSb.AppendFormat("        public IEnumerable<{0}Output> {0}([FromQuery]{0}Input input)", item.Key).AppendLine();
                 codeSb.AppendLine("        {");
-                codeSb.AppendFormat("          return  DbAccesstor.Query<{0}Output>(Configuration[\"SqlApis:SqlApi:{0}:SqlTpl\"],input);", item.Key).AppendLine();
+                codeSb.AppendFormat("          return  SqlExecutor.Query<{0}Output>(Configuration[\"SqlApis:SqlApi:{0}:SqlTpl\"],input);", item.Key).AppendLine();
                 codeSb.AppendLine("        }");
             }
             codeSb.AppendLine("    }");
