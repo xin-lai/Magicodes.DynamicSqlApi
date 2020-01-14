@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.DynamicSqlApi.Core", "src\Magicodes.DynamicSqlApi.Core\Magicodes.DynamicSqlApi.Core.csproj", "{6D9BB541-7735-4437-AB4F-54FCB295873C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.DynamicSqlApi.Core", "src\Magicodes.DynamicSqlApi.Core\Magicodes.DynamicSqlApi.Core.csproj", "{6D9BB541-7735-4437-AB4F-54FCB295873C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.DynamicSqlApi.All", "src\Magicodes.DynamicSqlApi.All\Magicodes.DynamicSqlApi.All.csproj", "{83ED9533-2D98-458E-8EE2-96FA03641968}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.DynamicSqlApi.Dapper", "src\Magicodes.DynamicSqlApi.Dapper\Magicodes.DynamicSqlApi.Dapper.csproj", "{B2583B3E-9CE6-4E6E-B673-B3806A327BE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.DynamicSqlApi.CsScript", "src\Magicodes.DynamicSqlApi.CsScript\Magicodes.DynamicSqlApi.CsScript.csproj", "{44FB13A8-2BD3-40DF-BA2B-260F5388477B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.DynamicSqlApi.SqlServer", "src\Magicodes.DynamicSqlApi.Sqlserver\Magicodes.DynamicSqlApi.SqlServer.csproj", "{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{6D9BB541-7735-4437-AB4F-54FCB295873C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D9BB541-7735-4437-AB4F-54FCB295873C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D9BB541-7735-4437-AB4F-54FCB295873C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83ED9533-2D98-458E-8EE2-96FA03641968}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83ED9533-2D98-458E-8EE2-96FA03641968}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83ED9533-2D98-458E-8EE2-96FA03641968}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83ED9533-2D98-458E-8EE2-96FA03641968}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2583B3E-9CE6-4E6E-B673-B3806A327BE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2583B3E-9CE6-4E6E-B673-B3806A327BE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2583B3E-9CE6-4E6E-B673-B3806A327BE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2583B3E-9CE6-4E6E-B673-B3806A327BE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44FB13A8-2BD3-40DF-BA2B-260F5388477B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44FB13A8-2BD3-40DF-BA2B-260F5388477B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44FB13A8-2BD3-40DF-BA2B-260F5388477B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44FB13A8-2BD3-40DF-BA2B-260F5388477B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

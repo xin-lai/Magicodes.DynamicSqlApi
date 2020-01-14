@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Magicodes.DynamicSqlApi.Core\Magicodes.DynamicSqlApi.Core.csproj" />
+    <ProjectReference Include="..\Magicodes.DynamicSqlApi.CsScript\Magicodes.DynamicSqlApi.CsScript.csproj" />
+    <ProjectReference Include="..\Magicodes.DynamicSqlApi.Dapper\Magicodes.DynamicSqlApi.Dapper.csproj" />
+    <ProjectReference Include="..\Magicodes.DynamicSqlApi.Sqlserver\Magicodes.DynamicSqlApi.SqlServer.csproj" />
+  </ItemGroup>
+
+</Project>
