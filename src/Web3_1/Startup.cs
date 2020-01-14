@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Magicodes.DynamicSqlApi.All;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Web3_1
 {
@@ -38,6 +39,8 @@ namespace Web3_1
                 //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 //c.IncludeXmlComments(xmlPath);
+
+                //c.DocumentFilter<TestFilter>();
             });
         }
 
@@ -65,4 +68,25 @@ namespace Web3_1
             });
         }
     }
+
+    //public class TestFilter : IDocumentFilter
+    //{
+    //    public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+    //    {
+    //        foreach (var item in swaggerDoc.Paths)
+    //        {
+    //            Console.WriteLine(item.Key + "----" + item.Value);
+    //        }
+    //        if (swaggerDoc.Paths.Any(p => p.Key.EndsWith("GetAbpAuditLogById")))
+    //        {
+    //            var path = swaggerDoc.Paths.First(p => p.Key.EndsWith("GetAbpAuditLogById"));
+    //            path.Value.Description = "²âÊÔ";
+    //            path.Value.Summary = "²âÊÔ";
+    //            if (path.Value.Parameters.Any())
+    //                path.Value.Parameters.First().Description = "²ÎÊý²âÊÔ";
+    //        }
+    //        //var path = swaggerDoc.Paths.Where(x => x.Key.Contains("Values")).First().Value;
+    //        //path.Post.Parameters.FirstOrDefault().Extensions.Add("x-stuff", "123456");
+    //    }
+    //}
 }
