@@ -8,7 +8,28 @@
 
 ![总体说明](./res/DynamicSqlApi.png)
 
-![结果](./res/swagger api.png)
+### 配置
+
+````xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <SqlApis>
+    <SqlApi Name="GetAbpAuditLogsList" SqlTpl="SELECT TOP (@Count) *
+        FROM [dbo].[AbpAuditLogs]">
+    </SqlApi>
+    <SqlApi Name="GetAbpAuditLogById">
+      <SqlTpl>
+        SELECT TOP 1 * FROM [dbo].[AbpAuditLogs]
+        WHERE [Id] = @Id
+      </SqlTpl>
+    </SqlApi>
+  </SqlApis>
+</configuration>
+````
+
+### 结果
+
+![结果](./res/swaggerapi.png)
 
 ## 相关官方Nuget包
 
