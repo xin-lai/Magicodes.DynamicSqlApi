@@ -8,6 +8,8 @@
 
 ![总体说明](./res/DynamicSqlApi.png)
 
+![结果](./res/swagger api.png)
+
 ## 相关官方Nuget包
 
 | 名称     |      Nuget      |
@@ -26,6 +28,81 @@
 - [ ] API权限控制
 - [ ] API文档以及注释
 
+## 开始使用
+
+1. 引用Nuget包"Magicodes.DynamicSqlApi.All"
+
+| 名称     |      说明      |      Nuget      |
+|----------|:-------------:|:-------------:|
+| Magicodes.DynamicSqlApi.All  | Magicodes.DynamicSqlApi 默认实现|  [![NuGet](https://buildstats.info/nuget/Magicodes.DynamicSqlApi.All)](https://www.nuget.org/packages/Magicodes.DynamicSqlApi.All) |
+
+2. 添加配置文件“sqlMapper.xml”
+
+配置文件默认为“sqlMapper.xml”，配置参考下文：
+````xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <SqlApis>
+    <SqlApi Name="GetAbpAuditLogsList" SqlTpl="SELECT TOP (@Count) *
+        FROM [dbo].[AbpAuditLogs]">
+    </SqlApi>
+    <SqlApi Name="GetAbpAuditLogById">
+      <SqlTpl>
+        SELECT TOP 1 * FROM [dbo].[AbpAuditLogs]
+        WHERE [Id] = @Id
+      </SqlTpl>
+    </SqlApi>
+  </SqlApis>
+</configuration>
+````
+
+如上述配置所示，仅需配置SQL语句即可，参数和结果列表全由Magicodes.DynamicSqlApi自动解析生成。Name是必须的。
+
+3. 配置ASP.NET Core工程
+
+添加配置：
+
+````C#
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    var env = hostingContext.HostingEnvironment;
+                    //根据环境变量加载不同的JSON配置
+                    config.AddJsonFile("appsettings.json", true, true)
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json",
+                            true, true);
+                    //从环境变量添加配置
+                    config.AddEnvironmentVariables();
+                    config.AddXmlFile("sqlMapper.xml", true, false);
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
+````
+
+启用DynamicSqlApi：
+
+````C#
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddAllDynamicSqlApi(Configuration["ConnectionStrings:Default"]);
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            app.UseDynamicSqlApi();
+        }
+````
 
 ## 联系我们
 
