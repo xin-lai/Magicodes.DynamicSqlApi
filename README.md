@@ -6,7 +6,7 @@
 
 ## 特点
 
-![总体说明](./res/Magicodes.DynamicSqlApi.png)
+![总体说明](./res/DynamicSqlApi.png)
 
 ## 相关官方Nuget包
 
