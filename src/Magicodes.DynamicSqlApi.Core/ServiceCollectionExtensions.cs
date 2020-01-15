@@ -22,24 +22,18 @@ namespace Magicodes.DynamicSqlApi.Core
         /// <param name="connectionString"></param>
         /// <param name="sqlMapperFileName"></param>
         public static void AddDynamicSqlApi<TCodeBuilder, TCodeCompiler, TSqlExecutor, TTSqlParser>(this IServiceCollection services, string connectionString, string sqlMapperFileName = "sqlMapper.xml")
-            where TCodeBuilder : class, ICodeBuilder
+            where TCodeBuilder : CodeBuilderBase 
             where TCodeCompiler : class, ICodeCompiler
             where TSqlExecutor : class, ISqlExecutor
             where TTSqlParser : class, ITSqlParser
         {
-            services.Configure<MvcOptions>(mvcOptions =>
-            {
-                AddConventions(mvcOptions);
-            });
-
-
             if (!string.IsNullOrWhiteSpace(connectionString))
                 services.AddTransient<IDbConnection>(p => new SqlConnection(connectionString));
             else
             {
                 throw new ApplicationException("请配置连接字符串！");
             }
-            services.AddTransient<ICodeBuilder, TCodeBuilder>();
+            services.AddTransient<CodeBuilderBase, TCodeBuilder>();
             services.AddTransient<ICodeCompiler, TCodeCompiler>();
             services.AddTransient<ISqlExecutor, TSqlExecutor>();
             services.AddTransient<ITSqlParser, TTSqlParser>();
@@ -54,17 +48,13 @@ namespace Magicodes.DynamicSqlApi.Core
         {
             var partManager = serviceProvider.GetService<ApplicationPartManager>();
             var logger = serviceProvider.GetService<ILogger>();
-            var codeBuilder = serviceProvider.GetService<ICodeBuilder>();
+            var codeBuilder = serviceProvider.GetService<CodeBuilderBase>();
             var code = codeBuilder.Build();
+            if (string.IsNullOrWhiteSpace(code)) return;
             logger?.LogDebug(code);
             var codeCompiler = serviceProvider.GetService<ICodeCompiler>();
             var assembly = codeCompiler.CompileCode(code);
             partManager?.FeatureProviders?.Add(new GenericTypeControllerFeatureProvider(assembly));
-        }
-
-        private static void AddConventions(MvcOptions options)
-        {
-            options.Conventions.Add(new GenericControllerRouteConvention());
         }
     }
 }

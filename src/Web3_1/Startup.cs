@@ -66,6 +66,11 @@ namespace Web3_1
             {
                 endpoints.MapControllers();
             });
+
+            foreach (var item in Configuration.GetSection("SqlApis").AsEnumerable())
+            {
+                Console.WriteLine(item.Key + ":" + item.Value);
+            }
         }
     }
 
