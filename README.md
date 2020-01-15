@@ -13,14 +13,26 @@
 ````xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-  <SqlApis>
+  <SqlApis Name="AuditLogs">
     <SqlApi Name="GetAbpAuditLogsList" SqlTpl="SELECT TOP (@Count) *
         FROM [dbo].[AbpAuditLogs]">
+      <Input>
+        <!--会根据参数名称自动合并字段配置-->
+        <Parameter Name="Count" DefaultValue="2"></Parameter>
+      </Input>
     </SqlApi>
     <SqlApi Name="GetAbpAuditLogById">
       <SqlTpl>
         SELECT TOP 1 * FROM [dbo].[AbpAuditLogs]
         WHERE [Id] = @Id
+      </SqlTpl>
+    </SqlApi>
+  </SqlApis>
+  <SqlApis Name="Users">
+    <SqlApi Name="GetAbpUsers">
+      <SqlTpl>
+        SELECT TOP (1000) *
+        FROM [dbo].[AbpUsers]
       </SqlTpl>
     </SqlApi>
   </SqlApis>
@@ -63,14 +75,26 @@
 ````xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-  <SqlApis>
+  <SqlApis Name="AuditLogs">
     <SqlApi Name="GetAbpAuditLogsList" SqlTpl="SELECT TOP (@Count) *
         FROM [dbo].[AbpAuditLogs]">
+      <Input>
+        <!--会根据参数名称自动合并字段配置-->
+        <Parameter Name="Count" DefaultValue="2"></Parameter>
+      </Input>
     </SqlApi>
     <SqlApi Name="GetAbpAuditLogById">
       <SqlTpl>
         SELECT TOP 1 * FROM [dbo].[AbpAuditLogs]
         WHERE [Id] = @Id
+      </SqlTpl>
+    </SqlApi>
+  </SqlApis>
+  <SqlApis Name="Users">
+    <SqlApi Name="GetAbpUsers">
+      <SqlTpl>
+        SELECT TOP (1000) *
+        FROM [dbo].[AbpUsers]
       </SqlTpl>
     </SqlApi>
   </SqlApis>

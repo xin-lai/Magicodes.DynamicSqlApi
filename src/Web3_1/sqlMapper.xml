@@ -4,7 +4,7 @@
     <SqlApi Name="GetAbpAuditLogsList" SqlTpl="SELECT TOP (@Count) *
         FROM [dbo].[AbpAuditLogs]">
       <Input>
-        <!--会合并参数-->
+        <!--会根据参数名称自动合并字段配置-->
         <Parameter Name="Count" DefaultValue="2"></Parameter>
       </Input>
     </SqlApi>
