@@ -1,0 +1,22 @@
+<Project>
+  <PropertyGroup>
+    <Version>0.0.1-beta</Version>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Authors>雪雁</Authors>
+    <Company>湖南心莱信息科技有限公司</Company>
+    <Product>麦扣</Product>
+    <PackageProjectUrl>https://docs.xin-lai.com/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/xin-lai/Magicodes.DynamicSqlApi</RepositoryUrl>
+    <Description>
+      根据SQL自动构建动态WebAPI。
+      官方网址：http://docs.xin-lai.com
+      开源库地址:https://github.com/xin-lai
+      博客地址：http://www.cnblogs.com/codelove/
+      交流QQ群：85318032
+    </Description>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+</Project>
