@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.3.32929.385
+VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.DynamicSqlApi.Core", "src\Magicodes.DynamicSqlApi.Core\Magicodes.DynamicSqlApi.Core.csproj", "{6D9BB541-7735-4437-AB4F-54FCB295873C}"
 EndProject
@@ -14,8 +14,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.DynamicSqlApi.SqlServer", "src\Magicodes.DynamicSqlApi.Sqlserver\Magicodes.DynamicSqlApi.SqlServer.csproj", "{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{F209EF50-996A-4A16-B326-FE92A494A4A8}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web3_1", "src\Web3_1\Web3_1.csproj", "{DA8FD030-153D-4925-9353-2DFD9DD12DC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{291717B8-6165-41C2-ABFC-DE18ABD44E43}"
 	ProjectSection(SolutionItems) = preProject
@@ -51,10 +49,6 @@ Global
 		{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA8FD030-153D-4925-9353-2DFD9DD12DC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA8FD030-153D-4925-9353-2DFD9DD12DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA8FD030-153D-4925-9353-2DFD9DD12DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA8FD030-153D-4925-9353-2DFD9DD12DC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9FA44933-E89C-4C86-9476-3D90CFC18C37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9FA44933-E89C-4C86-9476-3D90CFC18C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FA44933-E89C-4C86-9476-3D90CFC18C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,7 +58,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{DA8FD030-153D-4925-9353-2DFD9DD12DC0} = {F209EF50-996A-4A16-B326-FE92A494A4A8}
 		{9FA44933-E89C-4C86-9476-3D90CFC18C37} = {F209EF50-996A-4A16-B326-FE92A494A4A8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

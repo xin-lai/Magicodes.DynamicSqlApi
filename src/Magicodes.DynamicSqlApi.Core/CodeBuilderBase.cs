@@ -35,7 +35,7 @@ namespace Magicodes.DynamicSqlApi.Core
             {
                 var controllerBuilderInfo = new ControllerBuilderInfo()
                 {
-                    Name = group.Key + "Controller",
+                    Name = group.Key,
                     Route = "api/[controller]",
                     Key = group.Key
                 };

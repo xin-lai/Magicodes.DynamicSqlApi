@@ -12,7 +12,7 @@ using Web6.Data;
 namespace Web6.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221205112710_Init")]
+    [Migration("20221205144119_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,11 +36,13 @@ namespace Web6.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("MajorId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasComment("专业Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("名称");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");

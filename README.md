@@ -8,6 +8,12 @@
 
 ![总体说明](./res/DynamicSqlApi.png)
 
+### TODO
+
+- [ ] 使用模板语法生成API控制器：[scriban/scriban](https://github.com/scriban/scriban)
+- [ ] API注释
+- [ ] 基于数据表配置CURD
+
 ### 配置
 
 ````xml

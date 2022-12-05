@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Xml.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web6.Data.Models
 {
@@ -12,12 +13,14 @@ namespace Web6.Data.Models
         ///班级名称
         /// </summary>
         [Required(ErrorMessage = "名称不能为空")]
+        [Comment("名称")]
         public string Name { get; set; }
 
         /// <summary>
         /// 所属专业id
         /// </summary>
         [Required(ErrorMessage = "所属专业不能为空")]
+        [Comment("专业Id")]
         public int MajorId { get; set; }
 
         /// <summary>

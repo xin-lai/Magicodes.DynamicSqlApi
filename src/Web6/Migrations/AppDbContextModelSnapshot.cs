@@ -34,11 +34,13 @@ namespace Web6.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("MajorId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasComment("专业Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("名称");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
