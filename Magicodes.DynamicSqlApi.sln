@@ -1,29 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29613.14
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.DynamicSqlApi.Core", "src\Magicodes.DynamicSqlApi.Core\Magicodes.DynamicSqlApi.Core.csproj", "{6D9BB541-7735-4437-AB4F-54FCB295873C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.DynamicSqlApi.All", "src\Magicodes.DynamicSqlApi.All\Magicodes.DynamicSqlApi.All.csproj", "{83ED9533-2D98-458E-8EE2-96FA03641968}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.DynamicSqlApi.All", "src\Magicodes.DynamicSqlApi.All\Magicodes.DynamicSqlApi.All.csproj", "{83ED9533-2D98-458E-8EE2-96FA03641968}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.DynamicSqlApi.Dapper", "src\Magicodes.DynamicSqlApi.Dapper\Magicodes.DynamicSqlApi.Dapper.csproj", "{B2583B3E-9CE6-4E6E-B673-B3806A327BE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.DynamicSqlApi.Dapper", "src\Magicodes.DynamicSqlApi.Dapper\Magicodes.DynamicSqlApi.Dapper.csproj", "{B2583B3E-9CE6-4E6E-B673-B3806A327BE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.DynamicSqlApi.CsScript", "src\Magicodes.DynamicSqlApi.CsScript\Magicodes.DynamicSqlApi.CsScript.csproj", "{44FB13A8-2BD3-40DF-BA2B-260F5388477B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.DynamicSqlApi.CsScript", "src\Magicodes.DynamicSqlApi.CsScript\Magicodes.DynamicSqlApi.CsScript.csproj", "{44FB13A8-2BD3-40DF-BA2B-260F5388477B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.DynamicSqlApi.SqlServer", "src\Magicodes.DynamicSqlApi.Sqlserver\Magicodes.DynamicSqlApi.SqlServer.csproj", "{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.DynamicSqlApi.SqlServer", "src\Magicodes.DynamicSqlApi.Sqlserver\Magicodes.DynamicSqlApi.SqlServer.csproj", "{BFAE08CC-7BAE-4C90-B162-EBFFE578F67B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{F209EF50-996A-4A16-B326-FE92A494A4A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web2_2", "src\Web2_2\Web2_2.csproj", "{60B6C9A6-70D1-4BF7-90FD-E7423E37C17E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web2_2", "src\Web2_2\Web2_2.csproj", "{60B6C9A6-70D1-4BF7-90FD-E7423E37C17E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web3_1", "src\Web3_1\Web3_1.csproj", "{DA8FD030-153D-4925-9353-2DFD9DD12DC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web3_1", "src\Web3_1\Web3_1.csproj", "{DA8FD030-153D-4925-9353-2DFD9DD12DC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{291717B8-6165-41C2-ABFC-DE18ABD44E43}"
 	ProjectSection(SolutionItems) = preProject
 		common.props = common.props
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web6", "src\Web6\Web6.csproj", "{9FA44933-E89C-4C86-9476-3D90CFC18C37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{DA8FD030-153D-4925-9353-2DFD9DD12DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA8FD030-153D-4925-9353-2DFD9DD12DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA8FD030-153D-4925-9353-2DFD9DD12DC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FA44933-E89C-4C86-9476-3D90CFC18C37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FA44933-E89C-4C86-9476-3D90CFC18C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FA44933-E89C-4C86-9476-3D90CFC18C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FA44933-E89C-4C86-9476-3D90CFC18C37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +72,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{60B6C9A6-70D1-4BF7-90FD-E7423E37C17E} = {F209EF50-996A-4A16-B326-FE92A494A4A8}
 		{DA8FD030-153D-4925-9353-2DFD9DD12DC0} = {F209EF50-996A-4A16-B326-FE92A494A4A8}
+		{9FA44933-E89C-4C86-9476-3D90CFC18C37} = {F209EF50-996A-4A16-B326-FE92A494A4A8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7A744D7B-193A-431C-9830-327B791A8EEC}
