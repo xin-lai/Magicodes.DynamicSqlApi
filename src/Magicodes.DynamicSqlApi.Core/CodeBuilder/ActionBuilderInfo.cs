@@ -24,5 +24,10 @@
         /// 是否存在返回值
         /// </summary>
         public bool HasReturnValue { get; set; }
+
+        /// <summary>
+        /// 数据库连接
+        /// </summary>
+        public string ConnectionString { get; set; }
     }
 }

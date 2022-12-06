@@ -13,6 +13,9 @@
 - [ ] 使用模板语法生成API控制器：[scriban/scriban](https://github.com/scriban/scriban)
 - [x] API注释
 - [ ] 基于数据表配置CURD
+- [ ] 多个数据库连接配置
+- [ ] 命名空间隔离
+- [ ] 全局配置
 
 ### 配置
 

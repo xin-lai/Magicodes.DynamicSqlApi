@@ -117,7 +117,7 @@ namespace Magicodes.DynamicSqlApi.Core
         /// </summary>
         /// <param name="sqlTpl"></param>
         /// <param name="actionBuilderInfo"></param>
-        protected virtual void SetActionOutputFieldInfosFromSql(string sqlTpl, ActionBuilderInfo actionBuilderInfo) => actionBuilderInfo.ActionOutputInfo.ActionFieldInfos = TSqlParser.GetOutputFieldList(sqlTpl).Select(p => new ActionFieldInfo()
+        protected virtual void SetActionOutputFieldInfosFromSql(string sqlTpl, ActionBuilderInfo actionBuilderInfo) => actionBuilderInfo.ActionOutputInfo.ActionFieldInfos = TSqlParser.GetOutputFieldList(sqlTpl,actionBuilderInfo.ConnectionString).Select(p => new ActionFieldInfo()
         {
             TypeName = p.CsTypeName,
             Name = p.Name,
@@ -171,11 +171,14 @@ namespace Magicodes.DynamicSqlApi.Core
         /// </summary>
         /// <param name="sqlTpl"></param>
         /// <param name="actionBuilderInfo"></param>
-        protected virtual void SetActionInputFieldInfosFromSql(string sqlTpl, ActionBuilderInfo actionBuilderInfo) => actionBuilderInfo.ActionInputInfo.ActionFieldInfos = TSqlParser.GetParameters(sqlTpl).Select(p => new ActionFieldInfo()
+        protected virtual void SetActionInputFieldInfosFromSql(string sqlTpl, ActionBuilderInfo actionBuilderInfo)
         {
-            TypeName = p.CsTypeName,
-            Name = p.Name?.TrimStart('@')
-        }).ToList();
+            actionBuilderInfo.ActionInputInfo.ActionFieldInfos = TSqlParser.GetParameters(sqlTpl, actionBuilderInfo.ConnectionString).Select(p => new ActionFieldInfo()
+            {
+                TypeName = p.CsTypeName,
+                Name = p.Name?.TrimStart('@')
+            }).ToList();
+        }
 
         /// <summary>
         /// 
@@ -200,7 +203,8 @@ namespace Magicodes.DynamicSqlApi.Core
                 ActionOutputInfo = new ActionOutputInfo(),
                 SqlTpl = sqlTpl,
                 Comment = comment,
-                HasReturnValue = sqlTpl.IndexOf("select", StringComparison.CurrentCultureIgnoreCase) != -1
+                HasReturnValue = sqlTpl.IndexOf("select", StringComparison.CurrentCultureIgnoreCase) != -1,
+                ConnectionString = sqlApi["ConnectionString"]
             };
         }
 
@@ -338,11 +342,11 @@ namespace Magicodes.DynamicSqlApi.Core
                     //Console.WriteLine("SQL:" + Configuration[$"SqlApis:{controllerBuilderInfo.Name}:SqlApi:{actionBuilderInfos.Name}:SqlTpl"]);
                     if (actionBuilderInfos.HasReturnValue)
                     {
-                        CodeSb.Append($"          return await SqlExecutor.QueryAsync<{actionBuilderInfos.Name}Output>(sqlText{(actionBuilderInfos.ActionInputInfo.ActionInputType == ActionInputTypes.None ? string.Empty : ",input")});").AppendLine();
+                        CodeSb.Append($"          return await SqlExecutor.QueryAsync<{actionBuilderInfos.Name}Output>(sqlText{(actionBuilderInfos.ActionInputInfo.ActionInputType == ActionInputTypes.None ? string.Empty : ",input")},connectionString:@\"{actionBuilderInfos.ConnectionString}\");").AppendLine();
                     }
                     else
                     {
-                        CodeSb.Append($"          await SqlExecutor.ExecuteAsync(sqlText{(actionBuilderInfos.ActionInputInfo.ActionInputType == ActionInputTypes.None ? string.Empty : ",input")});").AppendLine();
+                        CodeSb.Append($"          await SqlExecutor.ExecuteAsync(sqlText{(actionBuilderInfos.ActionInputInfo.ActionInputType == ActionInputTypes.None ? string.Empty : ",input")},connectionString:@\"{actionBuilderInfos.ConnectionString}\");").AppendLine();
                         CodeSb.AppendLine("return Ok();");
                     }
 

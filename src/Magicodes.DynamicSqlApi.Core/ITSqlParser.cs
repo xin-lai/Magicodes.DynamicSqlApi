@@ -15,7 +15,7 @@ namespace Magicodes.DynamicSqlApi.Core
         /// </summary>
         /// <param name="sqlText"></param>
         /// <returns></returns>
-        IEnumerable<TSqlParameterInfo> GetParameters(string sqlText);
+        IEnumerable<TSqlParameterInfo> GetParameters(string sqlText, string connectionString = null);
 
         /// <summary>
         /// 获取TSQL输出字段列表
@@ -23,6 +23,6 @@ namespace Magicodes.DynamicSqlApi.Core
         /// <param name="sqlText"></param>
         /// <returns></returns>
 
-        IEnumerable<TSqlOutputFieldInfo> GetOutputFieldList(string sqlText);
+        IEnumerable<TSqlOutputFieldInfo> GetOutputFieldList(string sqlText, string connectionString = null);
     }
 }

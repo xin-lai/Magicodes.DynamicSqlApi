@@ -37,4 +37,12 @@
 			</SqlTpl>
 		</SqlApi>
 	</SqlApis>
+	<SqlApis Name="Iot">
+		<SqlApi Name="GetAllDevices" ConnectionString="Server=(localdb)\MSSQLLocalDB;Database=eschool-iot;Trusted_Connection=True;MultipleActiveResultSets=true">
+			<SqlTpl>
+				SELECT TOP (1000) *
+				FROM [dbo].[Devices]
+			</SqlTpl>
+		</SqlApi>
+	</SqlApis>
 </configuration>

@@ -25,14 +25,17 @@ namespace Magicodes.DynamicSqlApi.Sqlserver
         /// </summary>
         /// <param name="sqlText"></param>
         /// <returns></returns>
-        public IEnumerable<TSqlParameterInfo> GetParameters(string sqlText) => SqlExecutor.Query<GetSqlServerParametersOutput>("sp_describe_undeclared_parameters", new
+        public IEnumerable<TSqlParameterInfo> GetParameters(string sqlText, string connectionString = null)
         {
-            tsql = sqlText
-        }, commandType: CommandType.StoredProcedure).Select(p => new TSqlParameterInfo()
-        {
-            CsTypeName = p.suggested_system_type_name.GetCsTypeByDbType(),
-            Name = p.name
-        });
+            return SqlExecutor.Query<GetSqlServerParametersOutput>("sp_describe_undeclared_parameters", new
+            {
+                tsql = sqlText
+            }, commandType: CommandType.StoredProcedure, connectionString: connectionString).Select(p => new TSqlParameterInfo()
+            {
+                CsTypeName = p.suggested_system_type_name.GetCsTypeByDbType(),
+                Name = p.name
+            });
+        }
 
 
         /// <summary>
@@ -40,21 +43,23 @@ namespace Magicodes.DynamicSqlApi.Sqlserver
         /// </summary>
         /// <param name="sqlText"></param>
         /// <returns></returns>
-        public IEnumerable<TSqlOutputFieldInfo> GetOutputFieldList(string sqlText)
-         => SqlExecutor.Query<GetSqlServerOutputListDto>("sp_describe_first_result_set", new
-         {
-             tsql = sqlText,
-             @params = string.Empty,
-             browse_information_mode = 1
-         }, commandType: CommandType.StoredProcedure)
-            //不输出隐藏列
-            .Where(p => !p.is_hidden)
-            .Select(p => new TSqlOutputFieldInfo()
+        public IEnumerable<TSqlOutputFieldInfo> GetOutputFieldList(string sqlText, string connectionString = null)
+        {
+            return SqlExecutor.Query<GetSqlServerOutputListDto>("sp_describe_first_result_set", new
             {
-                CsTypeName = p.system_type_name.GetCsTypeByDbType(),
-                Name = p.name,
-                AllowNullable = p.is_nullable,
-                SqlTypeName = p.system_type_name
-            });
+                tsql = sqlText,
+                @params = string.Empty,
+                browse_information_mode = 1
+            }, commandType: CommandType.StoredProcedure, connectionString: connectionString)
+                    //不输出隐藏列
+                    .Where(p => !p.is_hidden)
+                    .Select(p => new TSqlOutputFieldInfo()
+                    {
+                        CsTypeName = p.system_type_name.GetCsTypeByDbType(),
+                        Name = p.name,
+                        AllowNullable = p.is_nullable,
+                        SqlTypeName = p.system_type_name
+                    });
+        }
     }
 }
