@@ -16,5 +16,13 @@
         /// </summary>
         public ActionInputInfo ActionInputInfo { get; set; }
         public string SqlTpl { get; set; }
+
+        public string Comment { get; set; }
+        public string HttpMethod { get; internal set; }
+
+        /// <summary>
+        /// 是否存在返回值
+        /// </summary>
+        public bool HasReturnValue { get; set; }
     }
 }

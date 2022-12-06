@@ -1,5 +1,6 @@
 ﻿using Magicodes.DynamicSqlApi.Core.CodeBuilder;
 using Magicodes.DynamicSqlApi.Core.DynamicApis;
+using Magicodes.DynamicSqlApi.Core.Extensions;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -36,8 +37,9 @@ namespace Magicodes.DynamicSqlApi.Core
                 var controllerBuilderInfo = new ControllerBuilderInfo()
                 {
                     Name = group.Key,
-                    Route = "api/[controller]",
-                    Key = group.Key
+                    Route = "api/" + group.Key.ToCamelCase(),
+                    Key = group.Key,
+                    Comment = group["Comment"],
                 };
 
                 foreach (var sqlApi in group.GetSection("SqlApi").GetChildren())
@@ -45,7 +47,7 @@ namespace Magicodes.DynamicSqlApi.Core
                     var actionBuilderInfo = CreateActionBuilderInfo(sqlApi, out var sqlTpl);
 
                     //设置参数绑定方式
-                    SetBindFrom(sqlApi, actionBuilderInfo);
+                    SetHttpMethodAndBindFrom(sqlApi, actionBuilderInfo);
                     controllerBuilderInfo.ActionBuilderInfos.Add(actionBuilderInfo);
 
                     SetActionInputFieldInfosFromSql(sqlTpl, actionBuilderInfo);
@@ -85,6 +87,7 @@ namespace Magicodes.DynamicSqlApi.Core
                     var name = par["Name"];
                     if (string.IsNullOrWhiteSpace(name))
                         continue;
+                    var comment = par["Comment"];
 
                     var type = par["Type"];
                     var defaultValue = par["DefaultValue"];
@@ -104,6 +107,7 @@ namespace Magicodes.DynamicSqlApi.Core
 
                     if (!string.IsNullOrWhiteSpace(defaultValue))
                         actionFieldInfo.DefaultValue = defaultValue;
+                    if (!comment.IsNullOrWhiteSpace()) actionFieldInfo.Comment = comment;
                 }
             }
         }
@@ -132,6 +136,8 @@ namespace Magicodes.DynamicSqlApi.Core
                 foreach (var par in sqlApi.GetSection("Input:Parameter").GetChildren())
                 {
                     var name = par["Name"];
+                    var comment = par["Comment"];
+
                     if (string.IsNullOrWhiteSpace(name))
                         continue;
 
@@ -154,6 +160,8 @@ namespace Magicodes.DynamicSqlApi.Core
 
                     if (!string.IsNullOrWhiteSpace(defaultValue))
                         actionFieldInfo.DefaultValue = defaultValue;
+
+                    if (!string.IsNullOrWhiteSpace(comment)) actionFieldInfo.Comment = comment;
                 }
             }
         }
@@ -178,16 +186,21 @@ namespace Magicodes.DynamicSqlApi.Core
         protected virtual ActionBuilderInfo CreateActionBuilderInfo(IConfigurationSection sqlApi, out string sqlTpl)
         {
             sqlTpl = sqlApi["SqlTpl"];
+            var comment = sqlApi["Comment"];
+            var httpMethod = sqlApi["HttpMethod"];
             return new ActionBuilderInfo()
             {
                 Name = sqlApi.Key,
-                HttpRoute = $"[HttpGet(\"{sqlApi.Key}\")]",
+                HttpMethod = httpMethod,
+                HttpRoute = sqlApi["HttpRoute"],
                 ActionInputInfo = new ActionInputInfo()
                 {
                     BindFrom = "[FromQuery]"
                 },
                 ActionOutputInfo = new ActionOutputInfo(),
-                SqlTpl = sqlTpl
+                SqlTpl = sqlTpl,
+                Comment = comment,
+                HasReturnValue = sqlTpl.IndexOf("select", StringComparison.CurrentCultureIgnoreCase) != -1
             };
         }
 
@@ -196,16 +209,43 @@ namespace Magicodes.DynamicSqlApi.Core
         /// </summary>
         /// <param name="sqlApi"></param>
         /// <param name="actionBuilderInfo"></param>
-        protected virtual void SetBindFrom(IConfigurationSection sqlApi, ActionBuilderInfo actionBuilderInfo)
+        protected virtual void SetHttpMethodAndBindFrom(IConfigurationSection sqlApi, ActionBuilderInfo actionBuilderInfo)
         {
             //[FromQuery] - 从查询字符串中获取值。
             //[FromRoute] - 从路由数据中获取值。
             //[FromForm] - 从发布的表单域中获取值。
             //[FromBody] - 从请求正文中获取值。
             //[FromHeader] - 从 HTTP 标头中获取值。
-            if (sqlApi.Key.StartsWith("update", StringComparison.OrdinalIgnoreCase) || sqlApi.Key.StartsWith("create", StringComparison.OrdinalIgnoreCase) || sqlApi.Key.StartsWith("put", StringComparison.OrdinalIgnoreCase) || sqlApi.Key.StartsWith("post", StringComparison.OrdinalIgnoreCase))
+            var keys = new Dictionary<string, string[]>()
             {
-                actionBuilderInfo.ActionInputInfo.BindFrom = "[FromBody]";
+                { "HttpPost" ,new string[]{ "create", "post", "insert" } },
+                { "HttpGet" ,new string[]{ "get","select"} },
+                { "HttpPut" ,new string[]{ "put", "update" } },
+                { "HttpDelete" ,new string[]{ "delete", "drop","remove" } },
+            };
+            foreach (var item in keys.Keys)
+            {
+                if (keys[item].Any(p => sqlApi.Key.StartsWith(p, StringComparison.CurrentCultureIgnoreCase)))
+                {
+                    actionBuilderInfo.HttpMethod = item;
+                    if(actionBuilderInfo.HttpRoute.IsNullOrWhiteSpace())
+                        actionBuilderInfo.HttpRoute = $"[{item}(\"{sqlApi.Key.ToCamelCase()}\")]";
+                }
+            }
+            switch (actionBuilderInfo.HttpMethod)
+            {
+                case "HttpGet":
+                    actionBuilderInfo.ActionInputInfo.BindFrom = "[FromQuery]";
+                    break;
+                case "HttpPost":
+                case "HttpPut":
+                    actionBuilderInfo.ActionInputInfo.BindFrom = "[FromBody]";
+                    break;
+                case "HttpDelete":
+                    actionBuilderInfo.ActionInputInfo.BindFrom = "[FromQuery]";
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -250,6 +290,8 @@ namespace Magicodes.DynamicSqlApi.Core
                 CodeSb.AppendLine("    [DynamicApiController()]");
                 CodeSb.AppendLine("    [ApiController]");
                 CodeSb.AppendLine($"    [Route(\"{controllerBuilderInfo.Route}\")]");
+                if (controllerBuilderInfo.Comment != null)
+                    CodeSb.AppendLine($"    [SwaggerTag(\"{controllerBuilderInfo.Comment}\")]");
                 CodeSb.AppendLine($"    public class {controllerBuilderInfo.Name}Controller : ControllerBase");
                 CodeSb.AppendLine("    {");
                 CodeSb.AppendLine($"        public {controllerBuilderInfo.Name}Controller(ISqlExecutor sqlExecutor, IConfiguration configuration)");
@@ -262,8 +304,10 @@ namespace Magicodes.DynamicSqlApi.Core
                 foreach (var actionBuilderInfos in controllerBuilderInfo.ActionBuilderInfos)
                 {
                     CodeSb.AppendLine();
-                    CodeSb.AppendLine($"        [HttpGet(\"{actionBuilderInfos.Name}\")]");
-                    CodeSb.Append("        public ");
+                    CodeSb.AppendLine($"        {actionBuilderInfos.HttpRoute}");
+                    if (!actionBuilderInfos.Comment.IsNullOrWhiteSpace())
+                        CodeSb.AppendLine($"[SwaggerOperation(Summary = \"{actionBuilderInfos.Comment}\")]");
+                    CodeSb.Append("        public async Task<");
                     switch (actionBuilderInfos.ActionOutputInfo.ActionOutputType)
                     {
                         case ActionOutputTypes.None:
@@ -276,7 +320,7 @@ namespace Magicodes.DynamicSqlApi.Core
                             CodeSb.Append("IActionResult");
                             break;
                     }
-                    CodeSb.Append($" {actionBuilderInfos.Name}(");
+                    CodeSb.Append($"> {actionBuilderInfos.Name}(");
                     switch (actionBuilderInfos.ActionInputInfo.ActionInputType)
                     {
                         case ActionInputTypes.None:
@@ -292,7 +336,16 @@ namespace Magicodes.DynamicSqlApi.Core
                     CodeSb.AppendLine($"          var sqlText = Configuration[\"SqlApis:{controllerBuilderInfo.Key}:SqlApi:{actionBuilderInfos.Name}:SqlTpl\"];");
                     //SqlApis:AuditLogs:SqlApi:GetAbpAuditLogById:SqlTpl
                     //Console.WriteLine("SQL:" + Configuration[$"SqlApis:{controllerBuilderInfo.Name}:SqlApi:{actionBuilderInfos.Name}:SqlTpl"]);
-                    CodeSb.Append($"          return  SqlExecutor.Query<{actionBuilderInfos.Name}Output>(sqlText{(actionBuilderInfos.ActionInputInfo.ActionInputType == ActionInputTypes.None ? string.Empty : ",input")});").AppendLine();
+                    if (actionBuilderInfos.HasReturnValue)
+                    {
+                        CodeSb.Append($"          return await SqlExecutor.QueryAsync<{actionBuilderInfos.Name}Output>(sqlText{(actionBuilderInfos.ActionInputInfo.ActionInputType == ActionInputTypes.None ? string.Empty : ",input")});").AppendLine();
+                    }
+                    else
+                    {
+                        CodeSb.Append($"          await SqlExecutor.ExecuteAsync(sqlText{(actionBuilderInfos.ActionInputInfo.ActionInputType == ActionInputTypes.None ? string.Empty : ",input")});").AppendLine();
+                        CodeSb.AppendLine("return Ok();");
+                    }
+
                     CodeSb.AppendLine("        }");
                 }
                 CodeSb.AppendLine("    }");
@@ -318,12 +371,15 @@ namespace Magicodes.DynamicSqlApi.Core
             {
                 foreach (var actionBuilderInfo in controllerBuilderInfo.ActionBuilderInfos)
                 {
+                    //构建输入参数类
                     if (actionBuilderInfo.ActionInputInfo.ActionInputType != ActionInputTypes.None)
                     {
                         CodeSb.Append($"    public class {actionBuilderInfo.Name}Input").AppendLine();
                         CodeSb.AppendLine("    {");
                         foreach (var parameter in actionBuilderInfo.ActionInputInfo.ActionFieldInfos)
                         {
+                            if (!parameter.Comment.IsNullOrWhiteSpace())
+                                CodeSb.AppendLine($"[SwaggerSchema(\"{parameter.Comment}\")]");
                             CodeSb.Append($"        public {parameter.TypeName}{GetParameterTypeName(parameter)} {parameter.Name} {{ get; set; }}");
                             if (parameter.DefaultValue != null)
                             {
@@ -337,12 +393,16 @@ namespace Magicodes.DynamicSqlApi.Core
 
                         CodeSb.AppendLine("    }");
                     }
+
+                    //构建输出参数类
                     if (actionBuilderInfo.ActionOutputInfo.ActionOutputType != ActionOutputTypes.None)
                     {
                         CodeSb.Append($"    public class {actionBuilderInfo.Name}Output").AppendLine();
                         CodeSb.AppendLine("    {");
                         foreach (var parameter in actionBuilderInfo.ActionOutputInfo.ActionFieldInfos)
                         {
+                            if (!parameter.Comment.IsNullOrWhiteSpace())
+                                CodeSb.AppendLine($"[SwaggerSchema(\"{parameter.Comment}\")]");
                             CodeSb.Append($"        public {parameter.TypeName}{GetParameterTypeName(parameter)} {parameter.Name.TrimStart('@')} {{ get; set; }}");
                             if (parameter.DefaultValue != null)
                             {

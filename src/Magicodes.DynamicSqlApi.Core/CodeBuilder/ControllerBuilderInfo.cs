@@ -23,6 +23,11 @@ namespace Magicodes.DynamicSqlApi.Core.CodeBuilder
         public string Key { get; set; }
 
         /// <summary>
+        /// 注释
+        /// </summary>
+        public string Comment { get; set; }
+
+        /// <summary>
         /// Action列表
         /// </summary>
         public List<ActionBuilderInfo> ActionBuilderInfos { get; set; } = new List<ActionBuilderInfo>();

@@ -9,5 +9,7 @@
         public bool? AllowNullable { get; set; }
 
         public object DefaultValue { get; set; }
+
+        public string Comment { get; set; }
     }
 }

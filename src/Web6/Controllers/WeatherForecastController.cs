@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Web6.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [SwaggerTag("Create, read, update and delete Products")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -19,6 +22,7 @@ namespace Web6.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
+        [SwaggerOperation(Summary = "Creates a new product")]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

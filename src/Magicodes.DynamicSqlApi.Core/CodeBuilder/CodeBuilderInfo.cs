@@ -22,6 +22,7 @@ namespace Magicodes.DynamicSqlApi.Core.CodeBuilder
             "System.Threading.Tasks",
             "Microsoft.AspNetCore.Mvc",
             "Microsoft.Extensions.Logging",
+            "Swashbuckle.AspNetCore.Annotations",
             typeof(ISqlExecutor).Namespace,
             typeof(IConfiguration).Namespace,
             typeof(DynamicApiControllerAttribute).Namespace

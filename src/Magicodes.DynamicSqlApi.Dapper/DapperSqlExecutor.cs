@@ -19,10 +19,19 @@ namespace Magicodes.DynamicSqlApi.Dapper
 
         public IDbConnection DbConnection { get; }
 
+        public async Task<int> ExecuteAsync(string sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
+        {
+            return await DbConnection.ExecuteAsync(sql, param, transaction, commandTimeout, commandType);
+        }
 
         public IEnumerable<T> Query<T>(string sql, object param = null, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null, CommandType? commandType = null) => DbConnection.Query<T>(sql, param, transaction, buffered, commandTimeout, commandType);
 
 
-        public async Task<IEnumerable<T>> QueryAsync<T>(string sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null) => await DbConnection.QueryAsync<T>(sql, param, transaction, commandTimeout, commandType);
+        public async Task<IEnumerable<T>> QueryAsync<T>(string sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
+        {
+            return await DbConnection.QueryAsync<T>(sql, param, transaction, commandTimeout, commandType);
+        }
+
+
     }
 }

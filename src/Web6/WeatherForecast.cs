@@ -1,7 +1,11 @@
+using Swashbuckle.AspNetCore.Annotations;
+
 namespace Web6
 {
+    [SwaggerSchema("²âÊÔ")]
     public class WeatherForecast
     {
+        [SwaggerSchema("ÈÕÆÚÃèÊö")]
         public DateTime Date { get; set; }
 
         public int TemperatureC { get; set; }

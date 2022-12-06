@@ -47,11 +47,15 @@ namespace Magicodes.DynamicSqlApi.Core
         public static void ConfigureAspNetCore(IServiceProvider serviceProvider)
         {
             var partManager = serviceProvider.GetService<ApplicationPartManager>();
-            var logger = serviceProvider.GetService<ILogger>();
+            
             var codeBuilder = serviceProvider.GetService<CodeBuilderBase>();
             var code = codeBuilder.Build();
             if (string.IsNullOrWhiteSpace(code)) return;
-            logger?.LogDebug(code);
+
+            var logger = serviceProvider.GetService<ILogger>();
+            if (logger!=null && logger.IsEnabled(LogLevel.Debug))
+                logger.LogDebug(code);
+
             var codeCompiler = serviceProvider.GetService<ICodeCompiler>();
             var assembly = codeCompiler.CompileCode(code);
             partManager?.FeatureProviders?.Add(new GenericTypeControllerFeatureProvider(assembly));
