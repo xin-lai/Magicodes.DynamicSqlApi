@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Web6.Data;
 using Magicodes.DynamicSqlApi.All;
 using Magicodes.DynamicSqlApi.Core;
+using Magicodes.DynamicSqlApi.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureAppConfiguration((hostingContext, config) => {
@@ -27,6 +28,7 @@ builder.Services.AddAllDynamicSqlApi(connectionString);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
+    c.CustomSchemaIds(s => s.FullName);
     c.EnableAnnotations();
 });
 

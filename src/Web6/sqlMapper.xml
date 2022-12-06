@@ -28,9 +28,17 @@
 				<Parameter Name="Name" Comment="名称"></Parameter>
 			</Input>
 		</SqlApi>
+		<SqlApi Name="GetStudents" Comment="分页查询">
+			<SqlTpl>
+				select top (select (@PageSize)) *
+				from (select row_number() over(order by id) as rownumber,*
+				from [dbo].[Students]) temp_row
+				where rownumber>(@SkipCount)
+			</SqlTpl>
+		</SqlApi>
 	</SqlApis>
 	<SqlApis Name="Classes">
-		<SqlApi Name="GetAll">
+		<SqlApi Name="GetAll" HttpRoute='[HttpGet("")]'>
 			<SqlTpl>
 				SELECT TOP (1000) *
 				FROM [dbo].[Classes]
@@ -38,9 +46,9 @@
 		</SqlApi>
 	</SqlApis>
 	<SqlApis Name="Iot">
-		<SqlApi Name="GetAllDevices" ConnectionString="Server=(localdb)\MSSQLLocalDB;Database=eschool-iot;Trusted_Connection=True;MultipleActiveResultSets=true">
+		<SqlApi Name="GetAll" ConnectionString="Server=(localdb)\MSSQLLocalDB;Database=eschool-iot;Trusted_Connection=True;MultipleActiveResultSets=true" HttpRoute='[HttpGet("")]'>
 			<SqlTpl>
-				SELECT TOP (1000) *
+				SELECT TOP (@PageSize) *
 				FROM [dbo].[Devices]
 			</SqlTpl>
 		</SqlApi>

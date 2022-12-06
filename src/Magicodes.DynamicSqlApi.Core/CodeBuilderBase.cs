@@ -265,7 +265,6 @@ namespace Magicodes.DynamicSqlApi.Core
             CodeSb = new StringBuilder();
             NamespacesBuild();
             ControllersBuild();
-            ActionClassBuild();
             return CodeSb.ToString();
         }
 
@@ -352,6 +351,7 @@ namespace Magicodes.DynamicSqlApi.Core
 
                     CodeSb.AppendLine("        }");
                 }
+                ActionClassBuild(controllerBuilderInfo);
                 CodeSb.AppendLine("    }");
                 CodeSb.AppendLine();
             }
@@ -369,60 +369,56 @@ namespace Magicodes.DynamicSqlApi.Core
         /// <summary>
         /// Action输入输出类构建
         /// </summary>
-        protected virtual void ActionClassBuild()
+        protected virtual void ActionClassBuild(ControllerBuilderInfo controllerBuilderInfo)
         {
-            foreach (var controllerBuilderInfo in CodeBuilderInfo.ControllerBuilderInfos)
+            foreach (var actionBuilderInfo in controllerBuilderInfo.ActionBuilderInfos)
             {
-                foreach (var actionBuilderInfo in controllerBuilderInfo.ActionBuilderInfos)
+                //构建输入参数类
+                if (actionBuilderInfo.ActionInputInfo.ActionInputType != ActionInputTypes.None)
                 {
-                    //构建输入参数类
-                    if (actionBuilderInfo.ActionInputInfo.ActionInputType != ActionInputTypes.None)
+                    CodeSb.Append($"    public class {actionBuilderInfo.Name}Input").AppendLine();
+                    CodeSb.AppendLine("    {");
+                    foreach (var parameter in actionBuilderInfo.ActionInputInfo.ActionFieldInfos)
                     {
-                        CodeSb.Append($"    public class {actionBuilderInfo.Name}Input").AppendLine();
-                        CodeSb.AppendLine("    {");
-                        foreach (var parameter in actionBuilderInfo.ActionInputInfo.ActionFieldInfos)
+                        if (!parameter.Comment.IsNullOrWhiteSpace())
+                            CodeSb.AppendLine($"[SwaggerSchema(\"{parameter.Comment}\")]");
+                        CodeSb.Append($"        public {parameter.TypeName}{GetParameterTypeName(parameter)} {parameter.Name} {{ get; set; }}");
+                        if (parameter.DefaultValue != null)
                         {
-                            if (!parameter.Comment.IsNullOrWhiteSpace())
-                                CodeSb.AppendLine($"[SwaggerSchema(\"{parameter.Comment}\")]");
-                            CodeSb.Append($"        public {parameter.TypeName}{GetParameterTypeName(parameter)} {parameter.Name} {{ get; set; }}");
-                            if (parameter.DefaultValue != null)
-                            {
-                                if (parameter.TypeName == "string")
-                                    CodeSb.Append($" = \"{parameter.DefaultValue}\";");
-                                else
-                                    CodeSb.Append($" = {parameter.DefaultValue};");
-                            }
-                            CodeSb.AppendLine();
+                            if (parameter.TypeName == "string")
+                                CodeSb.Append($" = \"{parameter.DefaultValue}\";");
+                            else
+                                CodeSb.Append($" = {parameter.DefaultValue};");
                         }
-
-                        CodeSb.AppendLine("    }");
+                        CodeSb.AppendLine();
                     }
 
-                    //构建输出参数类
-                    if (actionBuilderInfo.ActionOutputInfo.ActionOutputType != ActionOutputTypes.None)
-                    {
-                        CodeSb.Append($"    public class {actionBuilderInfo.Name}Output").AppendLine();
-                        CodeSb.AppendLine("    {");
-                        foreach (var parameter in actionBuilderInfo.ActionOutputInfo.ActionFieldInfos)
-                        {
-                            if (!parameter.Comment.IsNullOrWhiteSpace())
-                                CodeSb.AppendLine($"[SwaggerSchema(\"{parameter.Comment}\")]");
-                            CodeSb.Append($"        public {parameter.TypeName}{GetParameterTypeName(parameter)} {parameter.Name.TrimStart('@')} {{ get; set; }}");
-                            if (parameter.DefaultValue != null)
-                            {
-                                if (parameter.TypeName == "string")
-                                    CodeSb.Append($" = \"{parameter.DefaultValue}\";");
-                                else
-                                    CodeSb.Append($" = {parameter.DefaultValue};");
-                            }
-                            CodeSb.AppendLine();
-                        }
+                    CodeSb.AppendLine("    }");
+                }
 
-                        CodeSb.AppendLine("    }");
+                //构建输出参数类
+                if (actionBuilderInfo.ActionOutputInfo.ActionOutputType != ActionOutputTypes.None)
+                {
+                    CodeSb.Append($"    public class {actionBuilderInfo.Name}Output").AppendLine();
+                    CodeSb.AppendLine("    {");
+                    foreach (var parameter in actionBuilderInfo.ActionOutputInfo.ActionFieldInfos)
+                    {
+                        if (!parameter.Comment.IsNullOrWhiteSpace())
+                            CodeSb.AppendLine($"[SwaggerSchema(\"{parameter.Comment}\")]");
+                        CodeSb.Append($"        public {parameter.TypeName}{GetParameterTypeName(parameter)} {parameter.Name.TrimStart('@')} {{ get; set; }}");
+                        if (parameter.DefaultValue != null)
+                        {
+                            if (parameter.TypeName == "string")
+                                CodeSb.Append($" = \"{parameter.DefaultValue}\";");
+                            else
+                                CodeSb.Append($" = {parameter.DefaultValue};");
+                        }
+                        CodeSb.AppendLine();
                     }
+
+                    CodeSb.AppendLine("    }");
                 }
             }
-
         }
     }
 }
