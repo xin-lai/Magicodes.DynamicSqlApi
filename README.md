@@ -22,29 +22,59 @@
 ````xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-  <SqlApis Name="AuditLogs">
-    <SqlApi Name="GetAbpAuditLogsList" SqlTpl="SELECT TOP (@Count) *
-        FROM [dbo].[AbpAuditLogs]">
-      <Input>
-        <!--会根据参数名称自动合并字段配置-->
-        <Parameter Name="Count" DefaultValue="2"></Parameter>
-      </Input>
-    </SqlApi>
-    <SqlApi Name="GetAbpAuditLogById">
-      <SqlTpl>
-        SELECT TOP 1 * FROM [dbo].[AbpAuditLogs]
-        WHERE [Id] = @Id
-      </SqlTpl>
-    </SqlApi>
-  </SqlApis>
-  <SqlApis Name="Users">
-    <SqlApi Name="GetAbpUsers">
-      <SqlTpl>
-        SELECT TOP (1000) *
-        FROM [dbo].[AbpUsers]
-      </SqlTpl>
-    </SqlApi>
-  </SqlApis>
+	<SqlApis Name="Students" Comment="学生（增删改查等处理）">
+		<SqlApi Name="GetStudentsByCount" SqlTpl="SELECT TOP (@Count) *
+        FROM [dbo].[Students]" Comment="获取前N条学生数据">
+			<Input>
+				<!--会根据参数名称自动合并字段配置-->
+				<Parameter Name="Count" DefaultValue="2" Comment="获取记录数"></Parameter>
+			</Input>
+		</SqlApi>
+		<SqlApi Name="GetStudentById">
+			<SqlTpl>
+				SELECT TOP 1 * FROM [dbo].[Students]
+				WHERE [Id] = @Id
+			</SqlTpl>
+			<Output>
+				<Parameter Name="Name" DefaultValue="2" Comment="名称"></Parameter>
+			</Output>
+		</SqlApi>
+		<SqlApi Name="Insert" HttpRoute='[HttpPost("")]'>
+			<SqlTpl>
+				INSERT INTO [dbo].[Students]
+				([Name],[IdCard],[StudentCode],[Phone],[Nation],[Guardian],[GuardianPhone],[Address])
+				VALUES
+				(@Name,@IdCard,@StudentCode,@Phone,@Nation,@Guardian,@GuardianPhone,@Address)
+			</SqlTpl>
+			<Input>
+				<Parameter Name="Name" Comment="名称"></Parameter>
+			</Input>
+		</SqlApi>
+		<SqlApi Name="GetStudents" Comment="分页查询">
+			<SqlTpl>
+				select top (select (@PageSize)) *
+				from (select row_number() over(order by id) as rownumber,*
+				from [dbo].[Students]) temp_row
+				where rownumber>(@SkipCount)
+			</SqlTpl>
+		</SqlApi>
+	</SqlApis>
+	<SqlApis Name="Classes">
+		<SqlApi Name="GetAll" HttpRoute='[HttpGet("")]'>
+			<SqlTpl>
+				SELECT TOP (1000) *
+				FROM [dbo].[Classes]
+			</SqlTpl>
+		</SqlApi>
+	</SqlApis>
+	<SqlApis Name="Iot">
+		<SqlApi Name="GetAll" ConnectionString="Server=(localdb)\MSSQLLocalDB;Database=eschool-iot;Trusted_Connection=True;MultipleActiveResultSets=true" HttpRoute='[HttpGet("")]'>
+			<SqlTpl>
+				SELECT TOP (@PageSize) *
+				FROM [dbo].[Devices]
+			</SqlTpl>
+		</SqlApi>
+	</SqlApis>
 </configuration>
 ````
 
